@@ -5,21 +5,26 @@ import NoteListNav from '../NoteListNav/NoteListNav'
 import NotePageNav from '../NotePageNav/NotePageNav'
 import NoteListMain from '../NoteListMain/NoteListMain'
 import NotePageMain from '../NotePageMain/NotePageMain'
-import AddFolder from '../AddFolder/AddFolder'
-import AddNote from '../AddNote/AddNote'
 import dummyStore from '../dummy-store'
 import { getNotesForFolder, findNote, findFolder } from '../notes-helpers'
+//import config from '../config'
 import './App.css'
 
 class App extends Component {
   state = {
     notes: [],
-    folders: [],
+    folders: []
   };
 
   componentDidMount() {
     // fake date loading from API call
     setTimeout(() => this.setState(dummyStore), 600)
+  }
+
+  handleDeleteNote = noteId => {
+    this.setState({
+      notes: this.state.notes.filter(note => note.id !== noteId)
+    })
   }
 
   renderNavRoutes() {
@@ -67,7 +72,7 @@ class App extends Component {
   }
 
   renderMainRoutes() {
-    const { notes, folders } = this.state
+    const { notes, /*folders*/ } = this.state
     return (
       <>
         {['/', '/folder/:folderId'].map(path =>
@@ -102,16 +107,17 @@ class App extends Component {
         />
         <Route
           path='/add-folder'
-          component={AddFolder}
+          render={routeProps => {
+            return (
+              <div></div>
+            )
+          }}
         />
         <Route
           path='/add-note'
           render={routeProps => {
             return (
-              <AddNote
-                {...routeProps}
-                folders={folders}
-              />
+              <div></div>
             )
           }}
         />
