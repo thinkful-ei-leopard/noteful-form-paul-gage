@@ -7,19 +7,20 @@ import config from '../config'
 import './Note.css'
 
 export default class Note extends Component {
-  static defaultProps = {
-    onDeleteNote: () => {}
+  static defaultProps ={
+    onDeleteNote: () => {},
   }
-  static contextType = ApiContext
+  static contextType = ApiContext;
 
   handleClickDelete = e => {
     e.preventDefault()
     const noteId = this.props.id
+
     fetch(`${config.API_ENDPOINT}/notes/${noteId}`, {
       method: 'DELETE',
       headers: {
         'content-type': 'application/json'
-      }
+      },
     })
       .then(res => {
         if (!res.ok)
@@ -34,6 +35,7 @@ export default class Note extends Component {
         console.error({error})
       })
   }
+  
   render() {
     return (
       <div className='Note'>
