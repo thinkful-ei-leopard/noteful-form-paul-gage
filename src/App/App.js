@@ -45,7 +45,7 @@ class App extends Component {
 
   handleAddNote = note => {
     this.setState({
-      notes: this.state.notes.push(note)
+      notes: [...this.state.notes, note]
     });
   };
 
@@ -58,8 +58,8 @@ class App extends Component {
   handleDeleteFolder = folderId => {
     this.setState({
       folders: this.state.folders.filter(x => x.id === folderId)
-    })
-  }
+    });
+  };
 
   renderNavRoutes() {
     return (
