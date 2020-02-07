@@ -13,7 +13,7 @@ export class AddNote extends Component {
       title: '',
       content: '',
       selectedFolder: '',
-      folderId: '',
+      folderId: 'b0715efe-ffaf-11e8-8eb2-f2801f1b9fd1',
       titleTouched: false,
       contentTouched: false
     };
@@ -38,6 +38,7 @@ export class AddNote extends Component {
   updateSelectedFolder(select) {
     const id = select[select.selectedIndex].id;
     const name = select[select.selectedIndex].value;
+    console.log(id, name);
     this.setState({
       selectedFolder: name,
       folderId: id,
@@ -129,7 +130,7 @@ export class AddNote extends Component {
           </div>
           <div>
             <label htmlFor="content">Content *</label>
-            <textarea
+            <input
               type="text"
               className="registration__control"
               name="content"
