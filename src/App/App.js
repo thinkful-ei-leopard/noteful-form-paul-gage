@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import NoteListNav from '../NoteListNav/NoteListNav';
@@ -12,7 +12,7 @@ import AddFolder from '../AddFolder/AddFolder';
 import AddNote from '../AddNote/AddNote';
 import ErrorBound from '../ErrorBound';
 
-class App extends Component {
+class App extends React.Component {
   state = {
     notes: [],
     folders: []
@@ -20,21 +20,17 @@ class App extends Component {
 
   componentDidMount() {
     Promise.all([
-      fetch(`${config.API_ENDPOINT}/notes`),
-      fetch(`${config.API_ENDPOINT}/folders`)
-    ])
-      .then(([notesRes, foldersRes]) => {
-        if (!notesRes.ok) return notesRes.json().then(e => Promise.reject(e));
-        if (!foldersRes.ok)
-          return foldersRes.json().then(e => Promise.reject(e));
-        return Promise.all([notesRes.json(), foldersRes.json()]);
-      })
-      .then(([notes, folders]) => {
-        this.setState({ notes, folders });
-      })
-      .catch(error => {
-        console.error({ error });
-      });
+      fetch(`${config.API_ENDPOINT}/api/notes`),
+      fetch(`${config.API_ENDPOINT}/api/folders`)
+    ]).then(([notesRes, foldersRes]) => {
+      if (!notesRes.ok) return notesRes.json().then(e => Promise.reject(e));
+      if (!foldersRes.ok) return foldersRes.json().then(e => Promise.reject(e));
+      return Promise.all([notesRes.json(), foldersRes.json()])
+        .then(([notes, folders]) => {
+          this.setState({ notes, folders });
+        })
+        .catch(error => {});
+    });
   }
 
   handleAddFolder = folder => {
@@ -96,6 +92,7 @@ class App extends Component {
       addFolder: this.handleAddFolder,
       addNote: this.handleAddNote
     };
+    
     return (
       <ApiContext.Provider value={value}>
         <div className="App">

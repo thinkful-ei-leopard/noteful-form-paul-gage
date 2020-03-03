@@ -10,10 +10,10 @@ export class AddNote extends Component {
     super(props);
 
     this.state = {
-      title: '',
+      note_name: '',
       content: '',
       selectedFolder: '',
-      folderId: 'b0715efe-ffaf-11e8-8eb2-f2801f1b9fd1',
+      folder: 1,
       titleTouched: false,
       contentTouched: false
     };
@@ -21,9 +21,9 @@ export class AddNote extends Component {
 
   static contextType = ApiContext;
 
-  updateName(title) {
+  updateName(note_name) {
     this.setState({
-      title: title,
+      note_name: note_name,
       titleTouched: true
     });
   }
@@ -36,28 +36,28 @@ export class AddNote extends Component {
   }
 
   updateSelectedFolder(select) {
-    const id = select[select.selectedIndex].id;
+    const id = parseInt(select[select.selectedIndex].id);
     const name = select[select.selectedIndex].value;
-    console.log(id, name);
+    
     this.setState({
       selectedFolder: name,
-      folderId: id,
+      folder: id
     });
   }
 
   handleSubmit(event) {
     event.preventDefault();
     const date = new Date();
-    const { title, content, folderId } = this.state;
+    const { note_name, content, folder } = this.state;
  
     const data = {
-      name: title,
+      note_name: note_name,
       modified: date,
       content: content,
-      folderId: folderId
+      folder: folder
     };
 
-    fetch(`${config.API_ENDPOINT}/notes`, {
+    fetch(`${config.API_ENDPOINT}/api/notes`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
@@ -70,16 +70,17 @@ export class AddNote extends Component {
       return res.json();
     })
     .then((data) => {
+      
       this.context.addNote(data)
       this.props.history.push('/')
     })
     .catch(err => {
-      console.log(err.message)
-    });
+      
+    })
   }
 
   validateTitle() {
-    const title = this.state.title.trim();
+    const title = this.state.note_name.trim();
     if (title.length === 0) {
       return 'please enter a title';
     } else if (title.length > 20) {
@@ -100,8 +101,8 @@ export class AddNote extends Component {
     const { folders = [] } = this.context;
     return folders.map(folder => {
       return (
-        <option key={folder.id} id={folder.id} value={folder.name}>
-          {folder.name}
+        <option key={folder.id} id={folder.id} value={folder.folder_name}>
+          {folder.folder_name}
         </option>
       );
     });
@@ -119,7 +120,7 @@ export class AddNote extends Component {
             <input
               type="text"
               className="registration__control"
-              name="title"
+              name="note_name"
               id="title"
               onChange={e => this.updateName(e.target.value)}
               required
@@ -146,7 +147,9 @@ export class AddNote extends Component {
             <label>Folder:</label>
             <select
               value={this.state.selectedFolder}
-              onChange={e => this.updateSelectedFolder(e.target)}>
+              onChange={e => {
+                
+                this.updateSelectedFolder(e.target)}}>
               {this.generateFolderOptions()}
             </select>
           </div>

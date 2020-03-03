@@ -17,22 +17,18 @@ export default class Note extends Component {
     e.preventDefault();
     const noteId = this.props.id;
 
-    fetch(`${config.API_ENDPOINT}/notes/${noteId}`, {
+    fetch(`${config.API_ENDPOINT}/api/notes/${noteId}`, {
       method: 'DELETE',
       headers: {
         'content-type': 'application/json'
       }
     })
-      .then(res => {
-        if (!res.ok) return res.json().then(e => Promise.reject(e));
-        return res.json();
-      })
       .then(() => {
         this.context.deleteNote(noteId);
         this.props.onDeleteNote(noteId);
       })
       .catch(error => {
-        console.error({ error });
+        
       });
   };
 
@@ -40,7 +36,7 @@ export default class Note extends Component {
     return (
       <div className="Note">
         <h2 className="Note__title">
-          <Link to={`/note/${this.props.id}`}>{this.props.name}</Link>
+          <Link to={`/note/${this.props.id}`}>{this.props.note_name}</Link>
         </h2>
         <button
           className="Note__delete"
@@ -62,8 +58,8 @@ export default class Note extends Component {
 }
 
 Note.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  note_name: PropTypes.string.isRequired,
   modified: PropTypes.string.isRequired,
   onDeleteNote: PropTypes.func.isRequired
 };

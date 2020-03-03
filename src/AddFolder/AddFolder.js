@@ -10,7 +10,7 @@ class AddFolder extends Component {
     super(props);
 
     this.state = {
-      title: '',
+      folder_name: '',
       touched: false
     };
   }
@@ -19,12 +19,12 @@ class AddFolder extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const { title } = this.state;
+    const { folder_name } = this.state;
     const data = {
-      name: title
+      folder_name
     };
 
-    fetch(`${config.API_ENDPOINT}/folders`, {
+    fetch(`${config.API_ENDPOINT}/api/folders`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
@@ -42,12 +42,12 @@ class AddFolder extends Component {
         this.props.history.push('/');
       })
       .catch(err => {
-        console.log(err.message);
+        
       });
   }
 
   validateTitle() {
-    const title = this.state.title.trim();
+    const title = this.state.folder_name.trim();
     if (title.length === 0) {
       return 'please enter a title';
     } else if (title.length > 20) {
@@ -55,8 +55,8 @@ class AddFolder extends Component {
     }
   }
 
-  updateName(title) {
-    this.setState({ title: title, touched: true });
+  updateName(folder_name) {
+    this.setState({ folder_name: folder_name, touched: true });
   }
 
   render() {
@@ -71,9 +71,9 @@ class AddFolder extends Component {
             <input
               type="text"
               className="add-folder-title"
-              name="title"
+              name="folder_name"
               id="title"
-              value={this.state.title}
+              value={this.state.folder_name}
               onChange={e => this.updateName(e.target.value)}
               required
             />
